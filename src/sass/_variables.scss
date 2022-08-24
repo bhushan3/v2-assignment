@@ -1,0 +1,78 @@
+@use 'sass:color';
+
+/// Typography and Baseline
+/// ----------------------------------------------------------------------------
+
+/// The default font size for all text in pixels.
+$base-font-size: 16px;
+
+/// The distance between text baselines (vertical rhythm) in pixels.
+$base-line-height: 28px;
+
+/// Ratio for modular type scale.
+$type-scale-ratio: 1.25;
+
+/// Layout
+/// ----------------------------------------------------------------------------
+
+/// Define the minimum dimensions at which your layout will change, adapting to
+/// different screen sizes, for use in media queries.
+$breakpoint-data: (
+	small: 576px,
+	medium: 768px,
+	large: 992px,
+	xlarge: 1200px,
+	xxlarge: 1400px,
+);
+
+/// Colors
+/// ----------------------------------------------------------------------------
+$color-data: (
+	body-bg: #FFF,
+
+	primary: #FF497C,
+	primary-text: #FFF,
+
+	secondary: #1F2732,
+	secondary-text: #FFF,
+
+	selection-bg: #FF497C,
+	selection-text: #FFF,
+
+	text-primary: #1F2732,
+	text-secondary: #424242,
+	text-tertiary: #757575,
+
+	border: #E0E0E0,
+	link: #FF497C,
+	code: #03A964,
+	mark: #FF0,
+	list-marker: #FF497C,
+
+	input-bg: #F4F4F6,
+	input-text: #212121,
+	input-placeholder: #757575,
+	input-border: #F4F4F6,
+	input-hover-bg: color.adjust(#F4F4F6, $blackness: 10%),
+	input-hover-text: null,
+	input-hover-border: color.adjust(#F4F4F6, $blackness: 10%),
+	input-focus-bg: color.adjust(#F4F4F6, $blackness: 10%),
+	input-focus-text: null,
+	input-focus-border: color.adjust(#F4F4F6, $blackness: 10%),
+
+	button-bg: #FF497C,
+	button-text: #FFF,
+	button-hover-bg: color.adjust(#FF497C, $lightness: 10%),
+	button-hover-text: #FFF,
+	button-active-bg: color.adjust(#FF497C, $blackness: 10%),
+	button-active-text: #FFF,
+);
+$color-dark-data: ();
+
+/// Typography
+/// ----------------------------------------------------------------------------
+
+/// Use a native font stack that selects the best font-family for each OS and
+/// device.
+$native-sans-serif: #{system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'};
+$native-monospace: #{SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace};

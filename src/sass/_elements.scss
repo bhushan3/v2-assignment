@@ -1,0 +1,224 @@
+@use 'sass:math';
+@use 'sass:meta';
+@use 'functions' as *;
+@use 'variables' as *;
+@use 'mixins' as *;
+
+// Generics
+// -----------------------------------------------------------------------------
+:root {
+	--font-size-display1: 7.451em;
+	--font-size-display2: 7.451em;
+	--font-size-display3: 5.96em;
+	--font-size-display4: 4.768em;
+	--font-size-h1: 3.815em;
+	--font-size-h2: 3.052em;
+	--font-size-h3: 2.441em;
+	--font-size-h4: 1.953em;
+	--font-size-h5: 1.563em;
+	--font-size-h6: 1.25em;
+	--font-size-base: 1em;
+	--font-size-small: 0.8em;
+	--font-size-xsmall: 0.64em;
+	--transition-base: 200ms ease;
+	--border-width-thin: 0.0625em; // 1px
+	--border-width-medium: 0.125em; // 2px
+	--border-width-thick: 0.375em; // 4px
+	--border-width-thicker: 0.5em; // 8px
+	--border-radius-input: 0;
+	--border-radius-button: 99em;
+	--border-radius-iframe: 0;
+	--size-button: 4em;
+	--size-input: 3em;
+	--font-family-body: #{'Poppins', $native-sans-serif};
+	--font-family-heading: #{'Poppins', $native-sans-serif};
+	--font-family-code: #{$native-monospace};
+	--font-weight-body-light: 200;
+	--font-weight-body: 300;
+	--font-weight-body-semibold: 500;
+	--font-weight-body-bold: 600;
+	--font-weight-body-black: 900;
+	--font-weight-heading-light: 200;
+	--font-weight-heading: 300;
+	--font-weight-heading-semibold: 500;
+	--font-weight-heading-bold: 600;
+	--font-weight-heading-black: 900;
+	--font-weight-code: 400;
+	--font-weight-code-bold: 700;
+
+	@each $name, $value in $color-data {
+		@if $value {
+			--color-#{$name}: #{$value};
+		}
+	}
+
+	@each $name, $value in $color-dark-data {
+		@if $value {
+			--color-dark-#{$name}: #{$value};
+		}
+	}
+}
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+::selection {
+	background: var(--color-selection-bg);
+	color: var(--color-selection-text);
+}
+
+// Normalize
+// -----------------------------------------------------------------------------
+@include meta.load-css('normalize.css');
+
+// Basic HTML
+// -----------------------------------------------------------------------------
+html {
+	font-size: math.percentage(math.div($base-font-size, 16px));
+	line-height: math.div(px($base-line-height), px($base-font-size));
+	scroll-behavior: smooth;
+	text-underline-position: under;
+
+	@include media-query($until: xlarge) {
+		font-size: 14px;
+	}
+
+	@include media-query($until: small) {
+		font-size: 12px;
+	}
+}
+body {
+	background-color: var(--color-body-bg);
+	color: var(--color-text-secondary);
+	font-family: var(--font-family-body);
+
+	/* Make type rendering look crisper */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-weight: var(--font-weight-body);
+
+	/* Enable kerning and optional ligatures */
+	text-rendering: optimizeLegibility;
+}
+h1 {
+	font-size: var(--font-size-h1);
+	line-height: (1 + (math.div(0.5, 6)));
+}
+h2 {
+	font-size: var(--font-size-h2);
+	line-height: (1 + (math.div(0.5, 5)));
+}
+h3 {
+	font-size: var(--font-size-h3);
+	line-height: (1 + (math.div(0.5, 4)));
+}
+h4 {
+	font-size: var(--font-size-h4);
+	line-height: (1 + (math.div(0.5, 3)));
+}
+h5 {
+	font-size: var(--font-size-h5);
+	line-height: (1 + (math.div(0.5, 2)));
+}
+h6 {
+	font-size: var(--font-size-h6);
+	line-height: (1 + (math.div(0.5, 1)));
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: 0 0 0.5em;
+	padding: 0;
+	transition: all var(--transition-base);
+	font-family: var(--font-family-heading);
+	font-weight: var(--font-weight-heading-semibold);
+	// line-height: 1.25;
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+hr {
+	margin: 1em 0;
+	border: 0;
+	border-top: var(--border-width-medium) solid var(--color-border);
+}
+p {
+	margin: 0 0 1em;
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+
+// Forms and Input
+// -----------------------------------------------------------------------------
+::placeholder {
+	transition: color var(--transition-base);
+	opacity: 1; // Override Firefox's unusual default opacity
+	color: var(--color-input-placeholder);
+}
+:disabled,
+[readonly] {
+	&::placeholder {
+		color: var(--color-input-disabled-placeholder);
+	}
+	&:hover,
+	&:focus {
+		&::placeholder {
+			color: var(--color-input-disabled-placeholder);
+		}
+	}
+}
+
+// Images
+// -----------------------------------------------------------------------------
+img {
+	max-width: 100%;
+	height: auto;
+	vertical-align: top;
+}
+
+// Links
+// -----------------------------------------------------------------------------
+a {
+	transition: all var(--transition-base);
+	color: var(--color-link);
+	// text-decoration: none;
+	word-wrap: break-word; // Break long URLS
+	cursor: pointer; // Some <a> without href
+}
+
+// Lists
+// -----------------------------------------------------------------------------
+dl {
+	margin: 0 0 1em;
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+dt {
+	font-weight: font-weight(body-bold);
+}
+dd {
+	margin: 0 0 1em;
+	padding: 0 0 0 1em;
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+ol,
+ul {
+	margin: 0 0 1em;
+	padding: 0 0 0 1.5em;
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+li {
+	&::marker {
+		color: var(--color-list-marker);
+	}
+}

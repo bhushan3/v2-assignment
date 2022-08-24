@@ -1,0 +1,111 @@
+@use 'sass:color';
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:math';
+@use 'sass:meta';
+@use 'sass:selector';
+@use 'sass:string';
+@use 'functions' as *;
+@use 'variables' as *;
+
+/// Media Query mixin
+///
+/// @param {String | Boolean} $from (false)
+///   One of $breakpoints-data
+///
+/// @param {String | Boolean} $until (false)
+///   One of $breakpoints-data
+///
+/// @param {String | Boolean} $and (false)
+///   Additional media query parameters
+///
+/// @param {String} $media-type ($media-type)
+///   Media type: screen, print…
+///
+/// @ignore Undocumented API, for advanced use only:
+/// @ignore @param {Map} $breakpoints-data ($breakpoints-data)
+///
+/// @content styling rules, wrapped into a @media query when $responsive is true
+///
+/// @requires {function} convert-length
+/// @requires {function} breakpoint
+///
+/// @example scss
+///  .element {
+///    @include media-query($from: mobile) {
+///      color: red;
+///    }
+///    @include media-query($until: tablet) {
+///      color: blue;
+///    }
+///    @include media-query(mobile, tablet) {
+///      color: green;
+///    }
+///    @include media-query($from: tablet, $and: '(orientation: landscape)') {
+///      color: teal;
+///    }
+///    @include media-query(950px) {
+///      color: hotpink;
+///    }
+///    @include media-query(tablet, $media-type: screen) {
+///      color: hotpink;
+///    }
+/// }
+@mixin media-query($from: false, $until: false, $and: false, $media-type: all, $unit: $media-query-unit) {
+	$min-width: 0;
+	$max-width: 0;
+	$media-query: '';
+
+	@if $from {
+		@if meta.type-of($from) == number {
+			$min-width: convert-length($from, $unit);
+		} @else {
+			$min-width: convert-length(breakpoint($from), $unit);
+		}
+	}
+
+	@if $until {
+		@if meta.type-of($until) == number {
+			$max-width: convert-length($until, $unit);
+		} @else {
+			$o: if($unit == px, 0.01px, convert-length(0.01em, $unit));
+			$max-width: convert-length(breakpoint($until), $unit) - $o;
+		}
+	}
+
+	@if $min-width != 0 {
+		$media-query: '#{$media-query} and (min-width: #{$min-width})';
+	}
+
+	@if $max-width != 0 {
+		$media-query: '#{$media-query} and (max-width: #{$max-width})';
+	}
+
+	@if $and {
+		$media-query: '#{$media-query} and #{$and}';
+	}
+
+	// Remove unnecessary media query prefix 'all and '
+	@if $media-type == all and $media-query != '' {
+		$media-type: '';
+		$media-query: string.slice(string.unquote($media-query), 6);
+	}
+
+	@media #{$media-type + $media-query} {
+		@content;
+	}
+}
+
+/// Quick clearfix hack.
+///
+@mixin clearfix {
+	&::before,
+	&::after {
+		content: '';
+		display: table;
+	}
+
+	&::after {
+		clear: both;
+	}
+}
